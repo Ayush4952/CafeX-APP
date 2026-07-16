@@ -45,7 +45,7 @@ import com.example.cafex.viewmodel.CafeUiState
 fun HomeScreen(
     user: User?,
     uiState: CafeUiState,
-    firebaseEnabled: Boolean,
+    databaseEnabled: Boolean,
     onSearchChange: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onItemClick: (CafeItem) -> Unit,
@@ -103,7 +103,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = if (firebaseEnabled) {
+                        imageVector = if (databaseEnabled) {
                             Icons.Rounded.CloudDone
                         } else {
                             Icons.Rounded.CloudOff
@@ -112,10 +112,10 @@ fun HomeScreen(
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Text(
-                        text = if (firebaseEnabled) {
+                        text = if (databaseEnabled) {
                             "Synced with Firebase"
                         } else {
-                            "Demo mode — add Firebase when you are ready"
+                            "Local menu — enable Realtime Database for cloud sync"
                         },
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,

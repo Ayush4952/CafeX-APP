@@ -14,6 +14,7 @@ class AppViewModelFactory(
             AuthViewModel(
                 repository = container.authRepository,
                 isFirebaseEnabled = container.isFirebaseEnabled,
+                isDatabaseEnabled = container.isDatabaseEnabled,
             ) as T
         }
 

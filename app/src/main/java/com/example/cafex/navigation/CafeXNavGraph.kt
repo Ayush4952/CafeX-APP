@@ -86,7 +86,7 @@ fun CafeXNavGraph(
             HomeScreen(
                 user = authUiState.user,
                 uiState = cafeUiState,
-                firebaseEnabled = authUiState.isFirebaseEnabled,
+                databaseEnabled = authUiState.isDatabaseEnabled,
                 onSearchChange = cafeViewModel::setSearchQuery,
                 onCategorySelected = cafeViewModel::selectCategory,
                 onItemClick = { navController.navigate(Routes.detail(it.id)) },
@@ -164,7 +164,8 @@ fun CafeXNavGraph(
         composable(Routes.PROFILE) {
             ProfileScreen(
                 user = authUiState.user,
-                firebaseEnabled = authUiState.isFirebaseEnabled,
+                firebaseAuthEnabled = authUiState.isFirebaseEnabled,
+                databaseEnabled = authUiState.isDatabaseEnabled,
                 onBack = { navController.popBackStack() },
                 onLogout = {
                     authViewModel.logout()

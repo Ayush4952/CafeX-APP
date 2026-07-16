@@ -35,7 +35,8 @@ import com.example.cafex.model.User
 @Composable
 fun ProfileScreen(
     user: User?,
-    firebaseEnabled: Boolean,
+    firebaseAuthEnabled: Boolean,
+    databaseEnabled: Boolean,
     onBack: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
@@ -94,7 +95,7 @@ fun ProfileScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = if (firebaseEnabled) {
+                        imageVector = if (databaseEnabled) {
                             Icons.Rounded.CloudDone
                         } else {
                             Icons.Rounded.CloudOff
@@ -103,14 +104,24 @@ fun ProfileScreen(
                     )
                     Column {
                         Text(
-                            text = if (firebaseEnabled) "Firebase connected" else "Demo mode",
+                            text = when {
+                                databaseEnabled -> "Firebase connected"
+                                firebaseAuthEnabled -> "Firebase Authentication connected"
+                                else -> "Demo mode"
+                            },
                             style = MaterialTheme.typography.titleLarge,
                         )
                         Text(
-                            text = if (firebaseEnabled) {
-                                "Authentication and Realtime Database are active."
-                            } else {
-                                "Add google-services.json to enable cloud data."
+                            text = when {
+                                databaseEnabled -> {
+                                    "Authentication and Realtime Database are active."
+                                }
+
+                                firebaseAuthEnabled -> {
+                                    "Enable Realtime Database, then download a fresh google-services.json to activate cloud menu data."
+                                }
+
+                                else -> "Add google-services.json to enable Firebase."
                             },
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )

@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class AppContainer(context: Context) {
     val isFirebaseEnabled: Boolean
+    val isDatabaseEnabled: Boolean
     val authRepository: AuthRepository
     val cafeRepository: CafeRepository
 
@@ -24,15 +25,25 @@ class AppContainer(context: Context) {
             null
         }
 
+        val database = firebaseApp
+            ?.options
+            ?.databaseUrl
+            ?.takeIf(String::isNotBlank)
+            ?.let { databaseUrl ->
+                runCatching {
+                    FirebaseDatabase.getInstance(firebaseApp, databaseUrl).reference
+                }.getOrNull()
+            }
+
         isFirebaseEnabled = firebaseApp != null
+        isDatabaseEnabled = database != null
 
         if (firebaseApp != null) {
-            val database = FirebaseDatabase.getInstance(firebaseApp).reference
             authRepository = FirebaseAuthRepository(
                 auth = FirebaseAuth.getInstance(firebaseApp),
                 database = database,
             )
-            cafeRepository = FirebaseCafeRepository(database)
+            cafeRepository = database?.let(::FirebaseCafeRepository) ?: DemoCafeRepository()
         } else {
             authRepository = DemoAuthRepository()
             cafeRepository = DemoCafeRepository()

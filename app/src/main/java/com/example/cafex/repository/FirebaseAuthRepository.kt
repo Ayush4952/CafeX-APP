@@ -11,9 +11,9 @@ import kotlinx.coroutines.tasks.await
 
 class FirebaseAuthRepository(
     private val auth: FirebaseAuth,
-    database: DatabaseReference,
+    database: DatabaseReference?,
 ) : AuthRepository {
-    private val usersReference = database.child("users")
+    private val usersReference = database?.child("users")
 
     override val currentUser: Flow<User?> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener { firebaseAuth ->
@@ -64,7 +64,7 @@ class FirebaseAuthRepository(
             createdAt = System.currentTimeMillis(),
         )
 
-        usersReference.child(user.id).setValue(user).await()
+        usersReference?.child(user.id)?.setValue(user)?.await()
         user
     }
 

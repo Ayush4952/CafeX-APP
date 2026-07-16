@@ -16,6 +16,7 @@ data class AuthUiState(
     val isCheckingSession: Boolean = true,
     val isLoading: Boolean = false,
     val isFirebaseEnabled: Boolean = false,
+    val isDatabaseEnabled: Boolean = false,
     val errorMessage: String? = null,
     val infoMessage: String? = null,
 )
@@ -23,9 +24,13 @@ data class AuthUiState(
 class AuthViewModel(
     private val repository: AuthRepository,
     isFirebaseEnabled: Boolean,
+    isDatabaseEnabled: Boolean,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
-        AuthUiState(isFirebaseEnabled = isFirebaseEnabled),
+        AuthUiState(
+            isFirebaseEnabled = isFirebaseEnabled,
+            isDatabaseEnabled = isDatabaseEnabled,
+        ),
     )
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
