@@ -1,0 +1,20 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['id', 'fullName', 'email']) && newData.child('id').val() === auth.uid"
+      }
+    },
+    "items": {
+      ".read": "auth != null",
+      "$itemId": {
+        ".write": "auth != null && ((!data.exists() && newData.child('createdBy').val() === auth.uid) || (data.exists() && data.child('createdBy').val() === auth.uid))",
+        ".validate": "!newData.exists() || (newData.hasChildren(['id', 'name', 'description', 'price', 'categoryId', 'available', 'createdBy', 'createdAt']) && newData.child('id').val() === $itemId && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('price').isNumber() && newData.child('price').val() > 0)"
+      }
+    }
+  }
+}
