@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "754357712781",
+    "project_id": "cafex-8b4d3",
+    "storage_bucket": "cafex-8b4d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754357712781:android:98d389102053630f952fc4",
+        "android_client_info": {
+          "package_name": "com.example.cafex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu9KFOgqLlezQhw05dkGL7FqcZ4LgbcRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
