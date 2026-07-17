@@ -88,7 +88,7 @@ fun SplashScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                painter = painterResource(R.drawable.cafex_logo),
+                painter = painterResource(R.drawable.cafex_menu_logo),
                 contentDescription = "CafeX logo",
                 modifier = Modifier
                     .size(174.dp)

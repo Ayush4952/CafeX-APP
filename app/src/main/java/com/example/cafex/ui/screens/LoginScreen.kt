@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.cafex.R
 import com.example.cafex.ui.components.AuthScaffold
 import com.example.cafex.ui.components.LoadingOverlay
 import com.example.cafex.ui.components.PasswordField
@@ -47,6 +48,7 @@ fun LoginScreen(
             } else {
                 "Demo mode • use any valid email and 6+ character password"
             },
+            backgroundRes = R.drawable.login_cafe_background,
         ) {
             OutlinedTextField(
                 value = email,

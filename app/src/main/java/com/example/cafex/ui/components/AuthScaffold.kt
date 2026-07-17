@@ -1,5 +1,6 @@
 package com.example.cafex.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,12 +34,13 @@ import com.example.cafex.R
 fun AuthScaffold(
     title: String,
     subtitle: String,
+    @DrawableRes backgroundRes: Int = R.drawable.cafe_background,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.cafe_background),
+            painter = painterResource(backgroundRes),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,

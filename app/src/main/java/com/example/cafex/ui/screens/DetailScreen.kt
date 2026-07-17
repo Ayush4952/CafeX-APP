@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.AddShoppingCart
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.LocalCafe
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,14 +36,20 @@ import androidx.compose.ui.unit.dp
 import com.example.cafex.model.CafeCategories
 import com.example.cafex.model.CafeItem
 import com.example.cafex.ui.components.LoadingOverlay
+import com.example.cafex.ui.components.MenuItemIcon
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     item: CafeItem?,
+    isFavorite: Boolean,
+    cartQuantity: Int,
     isSaving: Boolean,
+    errorMessage: String?,
     onBack: () -> Unit,
+    onFavoriteToggle: () -> Unit,
+    onAddToCart: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
@@ -54,6 +62,24 @@ fun DetailScreen(
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Go back")
+                        }
+                    },
+                    actions = {
+                        if (item != null) {
+                            IconButton(onClick = onFavoriteToggle) {
+                                Icon(
+                                    imageVector = if (isFavorite) {
+                                        Icons.Rounded.Favorite
+                                    } else {
+                                        Icons.Rounded.FavoriteBorder
+                                    },
+                                    contentDescription = if (isFavorite) {
+                                        "Remove from favorites"
+                                    } else {
+                                        "Add to favorites"
+                                    },
+                                )
+                            }
                         }
                     },
                 )
@@ -85,9 +111,8 @@ fun DetailScreen(
                         color = MaterialTheme.colorScheme.primaryContainer,
                     ) {
                         Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Rounded.LocalCafe,
-                                contentDescription = null,
+                            MenuItemIcon(
+                                item = item,
                                 modifier = Modifier.size(68.dp),
                                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
@@ -116,6 +141,33 @@ fun DetailScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(modifier = Modifier.weight(1f))
+
+                    if (errorMessage != null) {
+                        Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        )
+                    }
+
+                    Button(
+                        onClick = onAddToCart,
+                        enabled = item.available,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(54.dp),
+                    ) {
+                        Icon(Icons.Rounded.AddShoppingCart, contentDescription = null)
+                        Text(
+                            if (cartQuantity > 0) {
+                                "  Add another · $cartQuantity in cart"
+                            } else {
+                                "  Add to cart"
+                            },
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
