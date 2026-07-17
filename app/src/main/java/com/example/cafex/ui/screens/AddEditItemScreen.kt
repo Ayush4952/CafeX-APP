@@ -45,6 +45,7 @@ fun AddEditItemScreen(
     isSaving: Boolean,
     onBack: () -> Unit,
     onSave: (String, String, String, String, Boolean) -> Unit,
+    initialCategoryId: String = "coffee",
     modifier: Modifier = Modifier,
 ) {
     var name by rememberSaveable(existingItem?.id) {
@@ -56,8 +57,8 @@ fun AddEditItemScreen(
     var description by rememberSaveable(existingItem?.id) {
         mutableStateOf(existingItem?.description.orEmpty())
     }
-    var categoryId by rememberSaveable(existingItem?.id) {
-        mutableStateOf(existingItem?.categoryId ?: "coffee")
+    var categoryId by rememberSaveable(existingItem?.id, initialCategoryId) {
+        mutableStateOf(existingItem?.categoryId ?: initialCategoryId)
     }
     var available by rememberSaveable(existingItem?.id) {
         mutableStateOf(existingItem?.available ?: true)

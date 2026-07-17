@@ -6,7 +6,9 @@ object Routes {
     const val SPLASH = "splash"
     const val LOGIN = "login"
     const val REGISTER = "register"
+    const val DASHBOARD = "dashboard"
     const val HOME = "home"
+    const val CART = "cart"
     const val ADD_ITEM = "add_item"
     const val PROFILE = "profile"
 

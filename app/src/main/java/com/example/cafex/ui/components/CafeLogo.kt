@@ -16,7 +16,7 @@ fun CafeLogo(
     size: Dp = 112.dp,
 ) {
     Image(
-        painter = painterResource(R.drawable.cafex_logo),
+        painter = painterResource(R.drawable.cafex_menu_logo),
         contentDescription = "CafeX logo",
         modifier = modifier.size(size),
         contentScale = ContentScale.Fit,

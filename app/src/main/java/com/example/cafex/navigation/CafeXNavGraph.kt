@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.cafex.ui.screens.AddEditItemScreen
+import com.example.cafex.ui.screens.CartScreen
+import com.example.cafex.ui.screens.DashboardScreen
 import com.example.cafex.ui.screens.DetailScreen
 import com.example.cafex.ui.screens.HomeScreen
 import com.example.cafex.ui.screens.LoginScreen
@@ -39,7 +41,7 @@ fun CafeXNavGraph(
             SplashScreen(
                 sessionReady = !authUiState.isCheckingSession,
                 onFinished = {
-                    val destination = if (authUiState.user == null) Routes.LOGIN else Routes.HOME
+                    val destination = if (authUiState.user == null) Routes.LOGIN else Routes.DASHBOARD
                     navController.navigate(destination) {
                         popUpTo(Routes.SPLASH) { inclusive = true }
                     }
@@ -50,7 +52,7 @@ fun CafeXNavGraph(
         composable(Routes.LOGIN) {
             LaunchedEffect(authUiState.user?.id) {
                 if (authUiState.user != null) {
-                    navController.navigate(Routes.HOME) {
+                    navController.navigate(Routes.DASHBOARD) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                         launchSingleTop = true
                     }
@@ -68,7 +70,7 @@ fun CafeXNavGraph(
         composable(Routes.REGISTER) {
             LaunchedEffect(authUiState.user?.id) {
                 if (authUiState.user != null) {
-                    navController.navigate(Routes.HOME) {
+                    navController.navigate(Routes.DASHBOARD) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                         launchSingleTop = true
                     }
@@ -82,6 +84,19 @@ fun CafeXNavGraph(
             )
         }
 
+        composable(Routes.DASHBOARD) {
+            DashboardScreen(
+                user = authUiState.user,
+                uiState = cafeUiState,
+                onOpenMenu = { navController.navigate(Routes.HOME) },
+                onAddItem = { navController.navigate(Routes.ADD_ITEM) },
+                onCartClick = { navController.navigate(Routes.CART) },
+                onProfileClick = { navController.navigate(Routes.PROFILE) },
+                onItemClick = { navController.navigate(Routes.detail(it.id)) },
+                onMessageShown = cafeViewModel::clearMessage,
+            )
+        }
+
         composable(Routes.HOME) {
             HomeScreen(
                 user = authUiState.user,
@@ -89,9 +104,37 @@ fun CafeXNavGraph(
                 databaseEnabled = authUiState.isDatabaseEnabled,
                 onSearchChange = cafeViewModel::setSearchQuery,
                 onCategorySelected = cafeViewModel::selectCategory,
+                onSortOrderSelected = cafeViewModel::setSortOrder,
+                onAvailableOnlyToggle = cafeViewModel::toggleAvailableOnly,
+                onFavoritesOnlyToggle = cafeViewModel::toggleFavoritesOnly,
+                onFavoriteToggle = cafeViewModel::toggleFavorite,
+                onAddToCart = cafeViewModel::addToCart,
                 onItemClick = { navController.navigate(Routes.detail(it.id)) },
                 onAddClick = { navController.navigate(Routes.ADD_ITEM) },
+                onDashboardClick = {
+                    if (!navController.popBackStack(Routes.DASHBOARD, inclusive = false)) {
+                        navController.navigate(Routes.DASHBOARD)
+                    }
+                },
+                onCartClick = { navController.navigate(Routes.CART) },
                 onProfileClick = { navController.navigate(Routes.PROFILE) },
+                onMessageShown = cafeViewModel::clearMessage,
+            )
+        }
+
+        composable(Routes.CART) {
+            CartScreen(
+                lines = cafeUiState.cartLines,
+                total = cafeUiState.cartTotal,
+                onBack = { navController.popBackStack() },
+                onIncrease = cafeViewModel::increaseCartQuantity,
+                onDecrease = cafeViewModel::decreaseCartQuantity,
+                onClear = cafeViewModel::clearCart,
+                onCheckout = {
+                    cafeViewModel.placeOrder {
+                        navController.popBackStack()
+                    }
+                },
             )
         }
 
@@ -99,6 +142,9 @@ fun CafeXNavGraph(
             AddEditItemScreen(
                 existingItem = null,
                 isSaving = cafeUiState.isSaving,
+                initialCategoryId = cafeUiState.selectedCategoryId
+                    .takeUnless { it == "all" }
+                    ?: "coffee",
                 onBack = { navController.popBackStack() },
                 onSave = { name, price, description, categoryId, available ->
                     cafeViewModel.addItem(
@@ -123,8 +169,13 @@ fun CafeXNavGraph(
 
             DetailScreen(
                 item = item,
+                isFavorite = itemId in cafeUiState.favoriteItemIds,
+                cartQuantity = cafeUiState.cartQuantities[itemId] ?: 0,
                 isSaving = cafeUiState.isSaving,
+                errorMessage = cafeUiState.errorMessage,
                 onBack = { navController.popBackStack() },
+                onFavoriteToggle = { cafeViewModel.toggleFavorite(itemId) },
+                onAddToCart = { cafeViewModel.addToCart(itemId) },
                 onEdit = { navController.navigate(Routes.edit(itemId)) },
                 onDelete = {
                     cafeViewModel.deleteItem(itemId) {

@@ -1,8 +1,6 @@
 package com.example.cafex.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Logout
-import androidx.compose.material.icons.rounded.CloudDone
-import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -82,52 +78,6 @@ fun ProfileScreen(
                 text = user?.email.orEmpty(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Spacer(modifier = Modifier.height(28.dp))
-
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.large,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-            ) {
-                Row(
-                    modifier = Modifier.padding(18.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = if (databaseEnabled) {
-                            Icons.Rounded.CloudDone
-                        } else {
-                            Icons.Rounded.CloudOff
-                        },
-                        contentDescription = null,
-                    )
-                    Column {
-                        Text(
-                            text = when {
-                                databaseEnabled -> "Firebase connected"
-                                firebaseAuthEnabled -> "Firebase Authentication connected"
-                                else -> "Demo mode"
-                            },
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                        Text(
-                            text = when {
-                                databaseEnabled -> {
-                                    "Authentication and Realtime Database are active."
-                                }
-
-                                firebaseAuthEnabled -> {
-                                    "Enable Realtime Database, then download a fresh google-services.json to activate cloud menu data."
-                                }
-
-                                else -> "Add google-services.json to enable Firebase."
-                            },
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-            }
 
             Spacer(modifier = Modifier.weight(1f))
             Button(

@@ -6,9 +6,9 @@
     <application
         android:name=".CafeXApplication"
         android:allowBackup="true"
-        android:icon="@drawable/cafex_logo"
+        android:icon="@drawable/cafex_menu_logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cafex_logo"
+        android:roundIcon="@drawable/cafex_menu_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeX">
         <activity
